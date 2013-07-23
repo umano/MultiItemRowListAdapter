@@ -5,7 +5,11 @@
     android:baselineAligned="false"
     android:orientation="horizontal" 
     android:gravity="center_vertical"
-    android:background="@android:color/white">
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:duplicateParentState="false"
+    android:clickable="true" 
+    android:background="@drawable/list_selector">
 
     <ImageView
         android:id="@+id/image"

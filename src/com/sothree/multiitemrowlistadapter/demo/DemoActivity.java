@@ -42,6 +42,12 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mContactsAdapter.close();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.demo, menu);
@@ -191,16 +197,19 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
             return convertView;
         }
 
-
-        //these two methods just disable the headers
-        @Override
-        public boolean areAllItemsEnabled() {
-            return true;
-        }
-
         @Override
         public long getItemId(int position) {
             return position;
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return false;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
         }
 
         public void close() {
