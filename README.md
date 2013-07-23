@@ -1,7 +1,7 @@
 Android Multi Item Row ListAdapter
 ==================================
 ### An Easy Way to Make Your ListView's Look Amazing on Tablets
-With the launch of the tablet version of Umano [Umano](http://umanoapp.com) [Android app](https://play.google.com/store/apps/details?id=com.sothree.umano) we decided to open-source another component, which allows to very quickly make your LiewViews and ListActivities looks amazing on tablets and phablets by placing multiple items of your ListAdapter in each row in a ListView. Umano Team <3 Open Source.
+With the launch of the tablet version of [Umano](http://umanoapp.com) [Android app](https://play.google.com/store/apps/details?id=com.sothree.umano) we decided to open-source another component, which allows to very quickly make your ListViews and ListActivities looks amazing on tablets and phablets by placing multiple items of your ListAdapter in each row in a ListView. Umano Team <3 Open Source.
 
 As seen in Umano ([http://umanoapp.com](http://umanoapp.com)):
 
@@ -9,7 +9,7 @@ As seen in Umano ([http://umanoapp.com](http://umanoapp.com)):
 
 ### Usage
 
-All you need to do is wrapper your original ListAdapter using a `MultiItemRowListAdapter`:
+All you need to do is wrap your original ListAdapter using a `MultiItemRowListAdapter`:
 ```java
     int spacing = (int)getResources().getDimension(R.dimen.spacing);
     int itemsPerRow = getResources().getInteger(R.integer.items_per_row);
