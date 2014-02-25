@@ -18,12 +18,18 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class DemoActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DemoActivity extends ListActivity implements
+LoaderManager.LoaderCallbacks<Cursor>,
+OnItemClickListener {
 
     private ContactsAdapter mContactsAdapter;
 
@@ -33,6 +39,9 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
         setContentView(R.layout.activity_demo);
 
         mContactsAdapter = new ContactsAdapter(this);
+        // We need to set the item on click listener on the original adapter instead of the ListView
+        // since each row in MultiItemRowListAdapter has multiple items
+        mContactsAdapter.setOnItemClickListener(this);
 
         int spacing = (int)getResources().getDimension(R.dimen.spacing);
         int itemsPerRow = getResources().getInteger(R.integer.items_per_row);
@@ -95,6 +104,7 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
         private final LayoutInflater mInflater;
 
         private Cursor mCursor;
+        private OnItemClickListener mOnItemClickListener;
 
         private final class ContactViewHolder {
             public TextView mContactName;
@@ -103,6 +113,10 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
 
         public ContactsAdapter(Activity context) {
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            mOnItemClickListener = listener;
         }
 
         public Cursor swapCursor(Cursor newCursor) {
@@ -133,7 +147,7 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
 
         //return the header view, if it's in a section header position
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
             ContactViewHolder viewHolder;
             if (convertView == null || !(convertView.getTag() instanceof ContactViewHolder)) {
                 convertView = mInflater.inflate(R.layout.include_list_item_contact, parent, false);
@@ -194,6 +208,18 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
                 viewHolder.mContactImage.setImageResource(0);
             }
 
+            final View clickedView = convertView;
+            // set the on click listener for each of the items
+            convertView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(null, clickedView, position, position);
+                    }
+
+                }
+            });
+
             return convertView;
         }
 
@@ -218,6 +244,13 @@ public class DemoActivity extends ListActivity implements LoaderManager.LoaderCa
             }
         }
     }
-
-
+    @Override
+    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+        if (mContactsAdapter != null) {
+            Cursor c = (Cursor)mContactsAdapter.getItem(position);
+            String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+            Toast t = Toast.makeText(this, "Clicked " + name, Toast.LENGTH_SHORT);
+            t.show();
+        }
+    }
 }
