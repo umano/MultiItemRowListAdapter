@@ -136,6 +136,10 @@ public class MultiItemRowListAdapter implements WrapperListAdapter {
 
             View newView = subView;
             if (p < mAdapter.getCount()) {
+            	if (subView instanceof PlaceholderView){
+            		view.removeView(subView);
+            		subView = null;
+            	}
                 newView = mAdapter.getView(p, subView, view);
             } else if (subView == null || !(subView instanceof PlaceholderView)) {
                 newView = new PlaceholderView(c);
